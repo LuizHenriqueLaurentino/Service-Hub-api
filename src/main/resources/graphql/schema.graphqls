@@ -1,0 +1,39 @@
+# Endpoint alternativo GraphQL do ServiceHub (POST /graphql).
+# Exige o mesmo token JWT do REST: Authorization: Bearer <token>
+
+enum ServiceCategory {
+    CLEANING
+    PLUMBING
+    ELECTRICAL
+    PAINTING
+    GARDENING
+    TECHNOLOGY
+    EDUCATION
+    OTHER
+}
+
+type Service {
+    id: ID!
+    title: String!
+    description: String
+    price: Float!
+    category: ServiceCategory!
+    active: Boolean!
+    createdAt: String!
+    updatedAt: String!
+}
+
+type ServicePage {
+    content: [Service!]!
+    page: Int!
+    size: Int!
+    totalElements: Int!
+    totalPages: Int!
+}
+
+type Query {
+    "Lista serviços com filtros opcionais e paginação (tamanho máximo 100)"
+    services(category: ServiceCategory, active: Boolean, page: Int = 0, size: Int = 10): ServicePage!
+    "Busca um serviço por id (erro NOT_FOUND se não existir)"
+    serviceById(id: ID!): Service
+}
